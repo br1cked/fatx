@@ -31,38 +31,38 @@ const char*		def_label	= "XBOX";			/// default label name
 fatx_context*	fatx_context::	fatxc = nullptr;
 
 string get_current_username() {
-    struct passwd *pw = getpwuid(geteuid());
+	struct passwd *pw = getpwuid(geteuid());
 
-    return string(pw->pw_name);
+	return string(pw->pw_name);
 }
 
 // Set real and effective user and group to 'username'. Return false on error.
 bool drop_privileges(string username) {
-    struct passwd *pw = getpwnam(username.c_str());
+	struct passwd *pw = getpwnam(username.c_str());
 
-    // set the real and effective UIDs and GIDs
-    if(setregid(pw->pw_gid, pw->pw_gid))
-    {
-        perror("setreuid");
-        return false;
-    }
-    if(setreuid(pw->pw_uid, pw->pw_uid))
-    {
-        printf("dropping guid to %d\n", pw->pw_gid);
-        string err_str = "Error dropping privileges";
+	// set the real and effective UIDs and GIDs
+	if(setregid(pw->pw_gid, pw->pw_gid))
+	{
+		perror("setreuid");
+		return false;
+	}
+	if(setreuid(pw->pw_uid, pw->pw_uid))
+	{
+		printf("dropping guid to %d\n", pw->pw_gid);
+		string err_str = "Error dropping privileges";
 #if defined DEBUG && defined DBG_CACHE
-        err_str += ": ";
-        err_str += strerror(errno);
-        dbglog(err_str);
+		err_str += ": ";
+		err_str += strerror(errno);
+		dbglog(err_str);
 #else // defined DEBUG && defined DBG_CACHE
-        perror(err_str.c_str());
+		perror(err_str.c_str());
 #endif // defined DEBUG && defined DBG_CACHE
-        return false;
-    }
+		return false;
+	}
 
-    cout << "Successfully dropped privileges to " << username << endl;
+	cout << "Successfully dropped privileges to " << username << endl;
 
-    return true;
+	return true;
 }
 
 template<typename key_t, typename value_t>
@@ -479,8 +479,8 @@ pair<bool, bool>			console::		read() {
 bool						fatx_context::	setup() {
 	if(!dev.setup())
 		return false;
-    if(mmi.runas.length() > 0 && !drop_privileges(mmi.runas))
-        return false;
+	if(mmi.runas.length() > 0 && !drop_privileges(mmi.runas))
+		return false;
 	if(!par.setup())
 		return false;
 	if(mmi.prog == frontend::fsck || mmi.prog == frontend::unrm || (mmi.prog == frontend::fuse && mmi.recover))
@@ -692,7 +692,7 @@ bool						frontend::		setup() {
 			("uid",  value<uid_t>(), "sets uid of the filesystem")
 			("gid",  value<gid_t>(), "sets gid of the filesystem")
 			("mask",  value<string>(), "sets mask for entries modes")
-            ("runas", value<string>(), "drop privileges after opening input device")
+			("runas", value<string>(), "drop privileges after opening input device")
 		;
 	}
 	if(prog == label || prog == mkfs) {
@@ -845,8 +845,8 @@ bool						frontend::		setup() {
 		size			= varmap["size"].as<streamptr>();
 	if(varmap.count("input"))
 		input			= varmap["input"].as<string>();
-    if(varmap.count("runas"))
-        runas           = varmap["runas"].as<string>();
+	if(varmap.count("runas"))
+		runas           = varmap["runas"].as<string>();
 	if(prog == label)
 		readonly		= !varmap.count("label");
 	if(varmap.count("option")) {
@@ -1798,7 +1798,7 @@ vareas						dskmap::		getareas(const clusptr& orig, lbdarea_t lbd) {
 			res.push_back(area(area_off, area_ptr, area_siz, area_start, prv_cls));
 			area_off += area_siz;
 			if(cur_cls != EOC && cur_cls != FLK)
-                area_ptr = clsarithm::cls2ptr(cur_cls);
+				area_ptr = clsarithm::cls2ptr(cur_cls);
 			area_siz = fatx_context::get()->par.clus_size;
 			area_start = cur_cls;
 		}
