@@ -50,13 +50,13 @@ bool drop_privileges(string username) {
 	{
 		printf("dropping guid to %d\n", pw->pw_gid);
 		string err_str = "Error dropping privileges";
-#if defined DEBUG && defined DBG_CACHE
+#ifdef DEBUG
 		err_str += ": ";
 		err_str += strerror(errno);
 		dbglog(err_str);
-#else // defined DEBUG && defined DBG_CACHE
+#else // DEBUG
 		perror(err_str.c_str());
-#endif // defined DEBUG && defined DBG_CACHE
+#endif // DEBUG
 		return false;
 	}
 
